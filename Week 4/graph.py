@@ -1,8 +1,14 @@
-
 graph = {
-
+    'A': {'B': 2, 'C': 1, 'D': 3, 'E': 9, 'F': 20},
+    'B': {'C': 4, 'E': 3},
+    'C': {'D': 8},
+    'D': {'E': 7},
+    'E': {'F': 5},
+    'F': {'C': 2, 'G': 2, 'H': 2},
+    'G': {'F': 1, 'H': 6},
+    'H': {'F': 9, 'G': 8},
+    'I': {}
 }
-
 
 # finds shortest path between 2 nodes of a graph using BFS
 def breadth_first_search(graph, start, goal):
@@ -46,14 +52,13 @@ def dijsktra(graph, initial, end):
     shortest_paths = {initial: (None, 0)}
     current_node = initial
     visited = set()
-    total_cost = 0
-    
     while current_node != end:
         visited.add(current_node)
         destinations = graph[current_node]
         weight_to_current_node = shortest_paths[current_node][1]
-
         for next_node in destinations:
+            if next_node not in graph:
+                continue
             weight = graph[current_node][next_node] + weight_to_current_node
             if next_node not in shortest_paths:
                 shortest_paths[next_node] = (current_node, weight)
@@ -61,14 +66,12 @@ def dijsktra(graph, initial, end):
                 current_shortest_weight = shortest_paths[next_node][1]
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, weight)
-
-        next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
+        next_destinations = {node: shortest_paths[node] for node in shortest_paths
+                             if node not in visited}
         if not next_destinations:
             return "Route Not Possible"
         # next node is the destination with the lowest weight
         current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
-        total_cost += shortest_paths[current_node][1]
-
     # Work back through destinations in shortest path
     path = []
     while current_node is not None:
@@ -77,20 +80,11 @@ def dijsktra(graph, initial, end):
         current_node = next_node
     # Reverse path
     path = path[::-1]
-    print("The cost of going between " + initial + " and " + end + " is", total_cost)
-    return path
-
-graph = {
-    'A': {'B': 2, 'C': 1, 'D': 3, 'E': 9, 'F': 20},
-    'B': {'C': 4, 'E': 3},
-    'C': {'D': 8},
-    'D': {'E': 7},
-    'E': {'F': 5},
-    'F': {'C': 2, 'G': 2, 'H': 2},
-    'G': {'F': 1, 'H': 6},
-    'H': {'F': 9, 'G': 8},
-    'I': {}
-}
+    # Calculate cost
+    cost = shortest_paths[end][1]
+    return path, cost
 
 print(breadth_first_search(graph, 'A', 'H'))
-print(dijsktra(graph, 'A', 'H'))
+shortest_path, cost = (dijsktra(graph, 'A', 'H'))
+print(shortest_path)
+print(cost)
