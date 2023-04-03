@@ -1,8 +1,8 @@
 class HashTable:
     def __init__(self) -> None:
         self.size = 10
-        self.slots = [None] * self.size
-        self.data = [None] * self.size
+        self.slots = [None] * self.size #keys
+        self.data = [None] * self.size  #data
 
     def hashfunction(self, key):
         return key % self.size
@@ -19,30 +19,24 @@ class HashTable:
             if self.slots[hashvalue] == key:
                 self.data[hashvalue] = data  # replace
             else:
-                nextslot = (hashvalue + self.rehash(key)) % self.size
-                while self.slots[nextslot] is not None and self.slots[nextslot] != key:
-                    nextslot = (nextslot + self.rehash(key)) % self.size
-                if self.slots[nextslot] is None:
-                    self.slots[nextslot] = key
-                    self.data[nextslot] = data
+                rehashvalue = self.rehash(key)
+                if self.slots[rehashvalue] is None:
+                    self.slots[rehashvalue] = key
+                    self.data[rehashvalue] = data
                 else:
-                    self.data[nextslot] = data  # replace
+                    print("Unresolved collisions, data was lost. ")
+
 
     def get(self, key):
-        startslot = self.hashfunction(key)
-        data = None
-        stop = False
-        found = False
-        position = startslot
-        while self.slots[position] is not None and not found and not stop:
+        start = self.hashfunction(key)
+        position = start
+        while self.slots[position] is not None:
             if self.slots[position] == key:
-                found = True
-                data = self.data[position]
-            else:
-                position = (position + self.rehash(key)) % self.size
-                if position == startslot:
-                    stop = True
-        return data
+                return self.data[position]
+            position = (position + 1) % self.size
+            if position == start:
+                break
+        return None
 
     def __getitem__(self, key):
         return self.get(key)
@@ -69,4 +63,4 @@ print(H.slots)
 print(H.data)
 
 # Print the value of the data for key 52
-print(H[52])
+print(H[89])
