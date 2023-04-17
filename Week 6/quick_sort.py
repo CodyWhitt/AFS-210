@@ -117,7 +117,7 @@ end_time = time.time()
 
 print(f"The execution time is: {end_time-start_time}")
 
-myList = [x for x in range(1000)]
+myList = [x for x in range(10000)]
 random.shuffle(myList)
 
 start_time = time.time()
@@ -125,7 +125,7 @@ quick_sort(myList, 0, len(myList)-1)
 end_time = time.time()
 print(f"middle: {end_time - start_time}")
 
-myList = [x for x in range(1000)]
+myList = [x for x in range(10000)]
 random.shuffle(myList)
 
 start_time = time.time()
@@ -133,7 +133,7 @@ quick_sort_middle(myList, 0, len(myList)-1)
 end_time = time.time()
 print(f"random: {end_time - start_time}")
 
-myList = [x for x in range(1000)]
+myList = [x for x in range(10000)]
 random.shuffle(myList)
 
 start_time = time.time()
@@ -141,7 +141,7 @@ quick_sort_random(myList, 0, len(myList)-1)
 end_time = time.time()
 print(f"median: {end_time - start_time}")
 
-myList = [x for x in range(1000)]
+myList = [x for x in range(10000)]
 random.shuffle(myList)
 
 start_time = time.time()
